@@ -5,7 +5,6 @@ import dao.CategoriaDAO;
 import dao.RegistroMovimentacaoDAO;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.List;
 import modelo.Produto;
 import modelo.Categoria;
@@ -45,74 +44,16 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         return produtoDAO.getMinhaListaProdutos();
     }
 
-    // Métodos adicionais do ProdutoDAO
+    @Override
     public Produto buscarProdutoPorId(int id) throws RemoteException {
         return produtoDAO.ProcurarProdutoID(id);
     }
 
+    @Override
     public Produto buscarProdutoPorNome(String nome) throws RemoteException {
         return produtoDAO.ProcurarProdutoNome(nome);
     }
 
-    public int obterMaiorIdProduto() throws RemoteException {
-        return produtoDAO.MaiorID();
-    }
-
-    public ArrayList<String> buscarCategoriasProdutos() throws RemoteException {
-        return produtoDAO.buscarCategorias();
-    }
-
-    public List<Produto> buscarProdutosPorCategoria(String categoria) throws RemoteException {
-        try {
-            return produtoDAO.buscarPorCategoria(categoria);
-        } catch (SQLException e) {
-            throw new RemoteException("Erro ao buscar produtos por categoria: " + e.getMessage());
-        }
-    }
-
-    public List<Produto> buscarProdutosPorNome(String nome) throws RemoteException {
-        try {
-            return produtoDAO.buscarPorNome(nome);
-        } catch (SQLException e) {
-            throw new RemoteException("Erro ao buscar produtos por nome: " + e.getMessage());
-        }
-    }
-
-    public List<Produto> buscarProdutosPorNomeECategoria(String nome, String categoria) throws RemoteException {
-        try {
-            return produtoDAO.buscarPorNomeECategoria(nome, categoria);
-        } catch (SQLException e) {
-            throw new RemoteException("Erro ao buscar produtos por nome e categoria: " + e.getMessage());
-        }
-    }
-
-    public boolean registrarEntradaProduto(int produtoId, int quantidadeEntrada, String observacao) throws RemoteException {
-        return produtoDAO.RegistrarEntradaProduto(produtoId, quantidadeEntrada, observacao);
-    }
-
-    public boolean registrarSaidaProduto(int produtoId, int quantidadeSaida, String observacao) throws RemoteException {
-        return produtoDAO.RegistrarSaidaProduto(produtoId, quantidadeSaida, observacao);
-    }
-
-    public void atualizarPrecoProduto(int idProduto, double novoPreco) throws RemoteException {
-        try {
-            produtoDAO.atualizarPreco(idProduto, novoPreco);
-        } catch (SQLException e) {
-            throw new RemoteException("Erro ao atualizar preço: " + e.getMessage());
-        }
-    }
-
-    public List<Produto> listarProdutosOrdenadosPorNome() throws RemoteException {
-        return produtoDAO.listarProdutoOrdenadoPorNome();
-    }
-
-    public List<Produto> listarProdutosAbaixoMinMax() throws RemoteException {
-        return produtoDAO.listarProdutosAbaixoMinMax();
-    }
-
-    public List<String[]> listarQuantidadePorCategoria() throws RemoteException {
-        return produtoDAO.listarQuantidadePorCategoria();
-    }
 
     // ========== CATEGORIA ==========
     @Override
@@ -154,7 +95,8 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
     // ========== MOVIMENTAÇÃO ==========
     @Override
     public void registrarMovimentacao(RegistroMovimentacao m) throws RemoteException {
-        registroMovimentacaoDAO.registrarMovimentacao(m);
+        // Usa o método que atualiza saldo automaticamente e avisa sobre min/max
+        registroMovimentacaoDAO.registrarMovimentacaoEAtualizarSaldo(m, produtoDAO);
     }
 
     @Override
@@ -162,8 +104,54 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         return registroMovimentacaoDAO.listarTodasMovimentacoes();
     }
 
-    // Métodos adicionais do RegistroMovimentacaoDAO
+    @Override
     public List<RegistroMovimentacao> listarMovimentacoesPorProduto(int produtoId) throws RemoteException {
         return registroMovimentacaoDAO.listarMovimentacoesPorProduto(produtoId);
+    }
+    
+    // ========== RELATÓRIOS ==========
+    @Override
+    public List<Produto> listarProdutosOrdenadosPorNome() throws RemoteException {
+        return produtoDAO.listarProdutoOrdenadoPorNome();
+    }
+    
+    @Override
+    public List<Produto> listarProdutosAbaixoMinimo() throws RemoteException {
+        return produtoDAO.listarProdutosAbaixoMinimo();
+    }
+    
+    @Override
+    public List<String[]> listarQuantidadePorCategoria() throws RemoteException {
+        return produtoDAO.listarQuantidadePorCategoria();
+    }
+    
+    @Override
+    public List<Object[]> listarBalancoFisicoFinanceiro() throws RemoteException {
+        return produtoDAO.listarBalancoFisicoFinanceiro();
+    }
+    
+    @Override
+    public double calcularValorTotalEstoque() throws RemoteException {
+        return produtoDAO.calcularValorTotalEstoque();
+    }
+    
+    @Override
+    public String[] produtoComMaisEntrada() throws RemoteException {
+        return registroMovimentacaoDAO.produtoComMaisEntrada();
+    }
+    
+    @Override
+    public String[] produtoComMaisSaida() throws RemoteException {
+        return registroMovimentacaoDAO.produtoComMaisSaida();
+    }
+    
+    // ========== FUNCIONALIDADES ESPECIAIS ==========
+    @Override
+    public boolean reajustarPrecosPercentual(double percentual) throws RemoteException {
+        try {
+            return produtoDAO.reajustarPrecosPercentual(percentual);
+        } catch (SQLException e) {
+            throw new RemoteException("Erro ao reajustar preços: " + e.getMessage());
+        }
     }
 }
