@@ -48,10 +48,9 @@ O sistema é composto por duas camadas principais:
 
 ## Integrantes da Equipe
 
-| Nome completo | RA |
-|----------------|----------------|
-| Roger Porton Kuntze | 10725118527 |
-| Bernardo Mendonça Santiago de Lima | 10725116225 |
-| Gustavo Abrahão de Melo Carvalho | 1072511496 |
-| Kayky de Souza Lautert | 1072511581 |
-
+| Nome completo | RA | Usuário GitHub |
+|----------------|----------------|----------------|
+| Roger Porton Kuntze | 10725118527 | rogerpk |
+| Bernardo Mendonça Santiago de Lima | 10725116225 | bnsant |
+| Gustavo Abrahão de Melo Carvalho | 1072511496 | gustavoabrahao |
+| Kayky de Souza Lautert | 1072511581 | Lautert7 |
