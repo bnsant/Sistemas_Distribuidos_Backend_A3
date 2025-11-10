@@ -1,9 +1,12 @@
 package modelo;
+import java.io.Serializable;
 import java.util.ArrayList;
 import dao.ProdutoDAO;
 
 
-public class Produto{
+public class Produto implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int id;
     private String nome;
     private String unidade;
@@ -12,7 +15,7 @@ public class Produto{
     private int min;
     private int max;
     private String categoria;
-    private ProdutoDAO dao;
+    private transient ProdutoDAO dao;
 
     public Produto() {
         this(0,"","",0.0,0,0,1000,"");
@@ -27,7 +30,6 @@ public class Produto{
         this.min = min;
         this.max = max;
         this.categoria = categoria;
-        dao = new ProdutoDAO();
     }
     
 
@@ -147,36 +149,47 @@ public class Produto{
         
     }
     
+    private void inicializarDaoSeNecessario() {
+        if (dao == null) {
+            dao = new ProdutoDAO();
+        }
+    }
+    
     public boolean RegistrarProduto(String nome,String unidade,double preco,int quantidade,int min, int max,String categoria){
+        inicializarDaoSeNecessario();
         int id = dao.MaiorID()+1;
         
         Produto NovoProduto = new Produto(id,nome,unidade, preco,quantidade,min,max,categoria);
         
         dao.CadastrarProduto(NovoProduto);
         return true;
-        
-        
     }
+    
     public boolean AtualizarProduto(int id, String nome,String unidade, double preco,int quantidade, int min, int max, String categoria){
+        inicializarDaoSeNecessario();
         Produto ProdutoAtualizado = new Produto(id,nome,unidade,preco,quantidade,min,max,categoria);
         dao.AtualizarProduto(ProdutoAtualizado);
         return true;
     }
+    
     public boolean DeletarProduto(int id){
+        inicializarDaoSeNecessario();
         return dao.DeletarProdutoID(id);
-        
     }
+    
     public Produto ProcurarProdutoId(int id){
+        inicializarDaoSeNecessario();
         return dao.ProcurarProdutoID(id);
-        
     }
+    
     public Produto ProcurarProdutoNome(String nome){
+        inicializarDaoSeNecessario();
         return dao.ProcurarProdutoNome(nome);
-        
     }
+    
     public ArrayList<Produto>getMinhaLista(){
+        inicializarDaoSeNecessario();
         return dao.getMinhaListaProdutos();
-        
     }
             
 }

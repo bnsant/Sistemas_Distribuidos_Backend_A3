@@ -1,8 +1,9 @@
-
 package modelo;
 
+import java.io.Serializable;
 
-public class RegistroMovimentacao {
+public class RegistroMovimentacao implements Serializable {
+    private static final long serialVersionUID = 1L;
     
     private int id;
     private int produtoId;
@@ -64,12 +65,12 @@ public class RegistroMovimentacao {
     }
     
     public String getDataMovimentacao() {
-    return dataMovimentacao;
-}
+        return dataMovimentacao;
+    }
 
-public void setDataMovimentacao(String dataMovimentacao) {
-    this.dataMovimentacao = dataMovimentacao;
-}
+    public void setDataMovimentacao(String dataMovimentacao) {
+        this.dataMovimentacao = dataMovimentacao;
+    }
     
     @Override
     public String toString(){

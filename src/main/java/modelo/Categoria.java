@@ -1,6 +1,10 @@
 package modelo;
 
-public class Categoria {
+import java.io.Serializable;
+
+public class Categoria implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int id;
     private String nomeCategoria;
     private String tamanho;
@@ -11,6 +15,10 @@ public class Categoria {
         this.nomeCategoria = nomeCategoria;
         this.tamanho = tamanho; 
         this.embalagem = embalagem; 
+    }
+
+    public Categoria() {
+        this(0, "", "", "");
     }
 
     public Categoria(String nomeCategoria, String tamanho, String embalagem) {

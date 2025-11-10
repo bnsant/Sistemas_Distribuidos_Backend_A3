@@ -23,7 +23,6 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         this.registroMovimentacaoDAO = new RegistroMovimentacaoDAO();
     }
 
-    // ========== PRODUTO ==========
     @Override
     public void criarProduto(Produto p) throws RemoteException {
         produtoDAO.CadastrarProduto(p);
@@ -54,8 +53,6 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         return produtoDAO.ProcurarProdutoNome(nome);
     }
 
-
-    // ========== CATEGORIA ==========
     @Override
     public void criarCategoria(Categoria c) throws RemoteException {
         try {
@@ -92,10 +89,8 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         }
     }
 
-    // ========== MOVIMENTAÇÃO ==========
     @Override
     public void registrarMovimentacao(RegistroMovimentacao m) throws RemoteException {
-        // Usa o método que atualiza saldo automaticamente e avisa sobre min/max
         registroMovimentacaoDAO.registrarMovimentacaoEAtualizarSaldo(m, produtoDAO);
     }
 
@@ -109,7 +104,6 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         return registroMovimentacaoDAO.listarMovimentacoesPorProduto(produtoId);
     }
     
-    // ========== RELATÓRIOS ==========
     @Override
     public List<Produto> listarProdutosOrdenadosPorNome() throws RemoteException {
         return produtoDAO.listarProdutoOrdenadoPorNome();
@@ -145,7 +139,6 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         return registroMovimentacaoDAO.produtoComMaisSaida();
     }
     
-    // ========== FUNCIONALIDADES ESPECIAIS ==========
     @Override
     public boolean reajustarPrecosPercentual(double percentual) throws RemoteException {
         try {
