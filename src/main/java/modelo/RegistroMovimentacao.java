@@ -83,5 +83,4 @@ public class RegistroMovimentacao implements Serializable {
                 ", dataMovimentacao='" + dataMovimentacao + '\'' +
             '}';
     }
-    
 }

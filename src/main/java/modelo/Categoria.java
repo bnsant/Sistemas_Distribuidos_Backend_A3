@@ -45,6 +45,7 @@ public class Categoria implements Serializable {
     public String toString() {
         return nomeCategoria;
     }
+    
     public String getTamanho() {
         return tamanho;
     }
