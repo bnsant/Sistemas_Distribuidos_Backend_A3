@@ -11,8 +11,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe de acesso a dados (DAO) para operações relacionadas a registros de movimentação.
+ * Fornece métodos para registrar, listar e consultar movimentações de estoque.
+ * 
+ * @author Sistema de Controle de Estoque
+ * @version 1.0
+ */
 public class RegistroMovimentacaoDAO {
 
+    /**
+     * Registra uma nova movimentação no banco de dados.
+     * 
+     * @param registro Registro de movimentação a ser salvo
+     * @return true se o registro foi bem-sucedido, false caso contrário
+     */
     public boolean registrarMovimentacao(RegistroMovimentacao registro) {
         Conexao conexao = new Conexao();
         String sql = "INSERT INTO registro_movimentacao (produto_id, tipo_movimentacao, quantidade, observacao, data_movimentacao) VALUES (?, ?, ?, ?, ?)";
@@ -43,6 +56,11 @@ public class RegistroMovimentacaoDAO {
  
     }
 
+    /**
+     * Lista todas as movimentações registradas, ordenadas por ID decrescente (mais recentes primeiro).
+     * 
+     * @return Lista de registros de movimentação
+     */
     public List<RegistroMovimentacao> listarTodasMovimentacoes() {
         List<RegistroMovimentacao> listaMovimentacoes = new ArrayList<>();
         Conexao conexao = new Conexao();
@@ -72,6 +90,12 @@ public class RegistroMovimentacaoDAO {
         return listaMovimentacoes;
     }
 
+    /**
+     * Lista todas as movimentações de um produto específico.
+     * 
+     * @param produtoId ID do produto
+     * @return Lista de registros de movimentação do produto, ordenados por ID decrescente
+     */
     public List<RegistroMovimentacao> listarMovimentacoesPorProduto(int produtoId) {
         List<RegistroMovimentacao> listaMovimentacoes = new ArrayList<>();
         Conexao conexao = new Conexao();
@@ -99,7 +123,11 @@ public class RegistroMovimentacaoDAO {
         return listaMovimentacoes;
     }
     
-    // Produto que mais teve entrada
+    /**
+     * Identifica o produto que teve mais entradas no estoque.
+     * 
+     * @return Array com [nome do produto, total de entradas] ou ["Nenhum", "0"] se não houver movimentações
+     */
     public String[] produtoComMaisEntrada() {
         Conexao conexao = new Conexao();
         String sql = "SELECT p.nome, SUM(rm.quantidade) as total_entrada " +
@@ -126,7 +154,11 @@ public class RegistroMovimentacaoDAO {
         return new String[]{"Nenhum", "0"};
     }
     
-    // Produto que mais teve saída
+    /**
+     * Identifica o produto que teve mais saídas do estoque.
+     * 
+     * @return Array com [nome do produto, total de saídas] ou ["Nenhum", "0"] se não houver movimentações
+     */
     public String[] produtoComMaisSaida() {
         Conexao conexao = new Conexao();
         String sql = "SELECT p.nome, SUM(rm.quantidade) as total_saida " +
@@ -153,7 +185,15 @@ public class RegistroMovimentacaoDAO {
         return new String[]{"Nenhum", "0"};
     }
     
-    // Registrar movimentação e atualizar saldo do produto automaticamente
+    /**
+     * Registra uma movimentação e atualiza automaticamente o saldo do produto no estoque.
+     * Realiza as operações em uma transação para garantir consistência dos dados.
+     * Verifica e alerta sobre quantidades abaixo do mínimo ou acima do máximo.
+     * 
+     * @param registro Registro de movimentação a ser salvo
+     * @param produtoDAO DAO de produtos para consultas
+     * @return true se o registro e atualização foram bem-sucedidos, false caso contrário
+     */
     public boolean registrarMovimentacaoEAtualizarSaldo(RegistroMovimentacao registro, ProdutoDAO produtoDAO) {
         Conexao conexao = new Conexao();
         Connection conn = null;

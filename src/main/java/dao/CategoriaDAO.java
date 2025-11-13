@@ -9,11 +9,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe de acesso a dados (DAO) para operações relacionadas a categorias.
+ * Fornece métodos para criar, listar, atualizar e excluir categorias no banco de dados.
+ * 
+ * @author Sistema de Controle de Estoque
+ * @version 1.0
+ */
 public class CategoriaDAO {
 
+    /**
+     * Conexão com o banco de dados.
+     */
     private Connection connection;
 
-
+    /**
+     * Construtor que inicializa a conexão com o banco de dados.
+     * Lança RuntimeException se não conseguir conectar.
+     * 
+     * @throws RuntimeException Se não conseguir estabelecer conexão com o banco
+     */
     public CategoriaDAO() {
         Conexao conexao = new Conexao();
         this.connection = conexao.conectar();
@@ -23,6 +38,12 @@ public class CategoriaDAO {
         }
     }
 
+    /**
+     * Salva uma nova categoria no banco de dados.
+     * 
+     * @param categoria Categoria a ser salva
+     * @throws SQLException Se ocorrer erro na operação de banco de dados
+     */
     public void salvar(Categoria categoria) throws SQLException {
         String sql = "INSERT INTO categoria (nome, tamanho, embalagem) VALUES (?, ?, ?)";
         try (
@@ -38,6 +59,12 @@ public class CategoriaDAO {
     }
 
 
+    /**
+     * Lista todas as categorias cadastradas no banco de dados.
+     * 
+     * @return Lista de categorias
+     * @throws SQLException Se ocorrer erro na operação de banco de dados
+     */
     public List<Categoria> listarCategorias() throws SQLException {
         List<Categoria> categorias = new ArrayList<>();
         String sql = "SELECT * FROM categoria";
@@ -60,6 +87,12 @@ public class CategoriaDAO {
         return categorias;
     }
 
+    /**
+     * Atualiza os dados de uma categoria existente no banco de dados.
+     * 
+     * @param categoria Categoria com os dados atualizados
+     * @throws SQLException Se ocorrer erro na operação de banco de dados
+     */
     public void atualizar(Categoria categoria) throws SQLException {
         String sql = "UPDATE categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE idcategoria = ?";
 
@@ -74,6 +107,12 @@ public class CategoriaDAO {
         }
     }
 
+    /**
+     * Exclui uma categoria do banco de dados pelo ID.
+     * 
+     * @param id ID da categoria a ser excluída
+     * @throws SQLException Se ocorrer erro na operação de banco de dados
+     */
     public void excluir(int id) throws SQLException {
         String sql = "DELETE FROM categoria WHERE idcategoria = ?";
 

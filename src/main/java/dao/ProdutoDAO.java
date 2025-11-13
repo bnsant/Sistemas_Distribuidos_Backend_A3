@@ -9,9 +9,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe de acesso a dados (DAO) para operações relacionadas a produtos.
+ * Fornece métodos para criar, buscar, atualizar, excluir e listar produtos no banco de dados.
+ * 
+ * @author Sistema de Controle de Estoque
+ * @version 1.0
+ */
 public class ProdutoDAO {
+    
+    /**
+     * Lista interna de produtos para cache.
+     */
     ArrayList<Produto>minhaLista = new ArrayList();
-//Função para cadastrar um novo produto.
+    
+    /**
+     * Cadastra um novo produto no banco de dados.
+     * 
+     * @param produto Produto a ser cadastrado
+     * @return true se o cadastro foi bem-sucedido, false caso contrário
+     */
     public boolean CadastrarProduto(Produto produto) {
         Conexao conexao = new Conexao();
         try (Connection conn = conexao.conectar()) {
@@ -36,7 +53,12 @@ public class ProdutoDAO {
             return false;
         }
     }
-//Função para procurar um produto a partir do id
+    /**
+     * Busca um produto no banco de dados pelo ID.
+     * 
+     * @param id ID do produto a ser buscado
+     * @return Produto encontrado ou produto vazio se não encontrado
+     */
     public Produto ProcurarProdutoID(int id) {
         Conexao conexao = new Conexao();
         Produto produto = new Produto();
@@ -63,7 +85,12 @@ public class ProdutoDAO {
 
         return produto;
     }
-//Função para procurar um produto no banco de dados a partir do nome.
+    /**
+     * Busca um produto no banco de dados pelo nome.
+     * 
+     * @param nome Nome do produto a ser buscado
+     * @return Produto encontrado ou produto vazio se não encontrado
+     */
     public Produto ProcurarProdutoNome(String nome) {
         Conexao conexao = new Conexao();
         Produto produto = new Produto();
@@ -93,8 +120,13 @@ public class ProdutoDAO {
 
         return produto;
     }
-//função para atualizar um produto já existente.
- public boolean AtualizarProduto(Produto produto) {
+    /**
+     * Atualiza os dados de um produto existente no banco de dados.
+     * 
+     * @param produto Produto com os dados atualizados
+     * @return true se a atualização foi bem-sucedida, false caso contrário
+     */
+    public boolean AtualizarProduto(Produto produto) {
     String sql = "UPDATE produto SET nome=?, unidade=?, quantidade=?, preco=?, min=?, max=?, categoria=? WHERE id=?";
     Conexao conexao = new Conexao();
 
@@ -118,7 +150,12 @@ public class ProdutoDAO {
         return false;
     }
 }   
-//função para deletar um produto a partir do id dele.
+    /**
+     * Exclui um produto do banco de dados pelo ID.
+     * 
+     * @param id ID do produto a ser excluído
+     * @return true se a exclusão foi bem-sucedida, false caso contrário
+     */
     public boolean DeletarProdutoID(int id) {
         Conexao conexao = new Conexao();
 
@@ -135,7 +172,11 @@ public class ProdutoDAO {
         }
     }
 
-    
+    /**
+     * Retorna uma lista com todos os produtos cadastrados no banco de dados.
+     * 
+     * @return Lista de produtos
+     */
     public ArrayList<Produto>getMinhaListaProdutos() {
         
         minhaLista.clear();
@@ -169,6 +210,11 @@ public class ProdutoDAO {
     }
  
 
+    /**
+     * Retorna o maior ID de produto cadastrado no banco de dados.
+     * 
+     * @return Maior ID encontrado, ou 0 se não houver produtos
+     */
     public int MaiorID(){
        Conexao conexao = new Conexao();
         int MaiorID = 0;
@@ -186,7 +232,12 @@ public class ProdutoDAO {
     }
         return MaiorID;
     }
-       public ArrayList<String> buscarCategorias() {
+    /**
+     * Busca todas as categorias distintas de produtos cadastrados.
+     * 
+     * @return Lista de nomes de categorias únicas, ordenadas alfabeticamente
+     */
+    public ArrayList<String> buscarCategorias() {
         ArrayList<String> lista = new ArrayList<>();
         Conexao conexao = new Conexao();
 
@@ -204,7 +255,14 @@ public class ProdutoDAO {
 
         return lista;
     }
-       public List<Produto> buscarPorCategoria(String categoria) throws SQLException { // pra filtrar por categoria
+    /**
+     * Busca produtos filtrados por categoria.
+     * 
+     * @param categoria Nome da categoria para filtrar
+     * @return Lista de produtos da categoria especificada
+     * @throws SQLException Se ocorrer erro na operação de banco de dados
+     */
+    public List<Produto> buscarPorCategoria(String categoria) throws SQLException {
     List<Produto> lista = new ArrayList<>();
     String sql = "SELECT * FROM produto WHERE categoria = ?";
 
@@ -229,7 +287,14 @@ public class ProdutoDAO {
     }
     return lista;
        }
-       public List<Produto> buscarPorNome(String nome) throws SQLException { // esse aqui é pra buscar por nome
+    /**
+     * Busca produtos cujo nome contém o texto especificado (busca parcial).
+     * 
+     * @param nome Texto a ser buscado no nome do produto
+     * @return Lista de produtos cujo nome contém o texto especificado
+     * @throws SQLException Se ocorrer erro na operação de banco de dados
+     */
+    public List<Produto> buscarPorNome(String nome) throws SQLException {
         List<Produto> lista = new ArrayList<>();
         String sql = "SELECT * FROM produto WHERE nome LIKE ?";
         try (Connection conn = new Conexao().conectar(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -251,7 +316,15 @@ public class ProdutoDAO {
         }
         return lista;
     }
-       public List<Produto> buscarPorNomeECategoria(String nome, String categoria) throws SQLException { // esse é por nome + categoria
+    /**
+     * Busca produtos filtrados por nome e categoria simultaneamente.
+     * 
+     * @param nome Texto a ser buscado no nome do produto
+     * @param categoria Nome da categoria para filtrar
+     * @return Lista de produtos que correspondem aos critérios
+     * @throws SQLException Se ocorrer erro na operação de banco de dados
+     */
+    public List<Produto> buscarPorNomeECategoria(String nome, String categoria) throws SQLException {
         List<Produto> lista = new ArrayList<>();
         String sql = "SELECT * FROM produto WHERE nome LIKE ? AND categoria = ?";
         try (Connection conn = new Conexao().conectar(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -274,7 +347,15 @@ public class ProdutoDAO {
         }
         return lista;
     }
-       public boolean RegistrarEntradaProduto(int produtoId, int quantidadeEntrada, String observacao){
+    /**
+     * Registra uma entrada de produto no estoque, incrementando a quantidade.
+     * 
+     * @param produtoId ID do produto
+     * @param quantidadeEntrada Quantidade a ser adicionada ao estoque
+     * @param observacao Observação sobre a entrada
+     * @return true se a entrada foi registrada com sucesso, false caso contrário
+     */
+    public boolean RegistrarEntradaProduto(int produtoId, int quantidadeEntrada, String observacao){
            Conexao conexao = new Conexao();
            Produto produto = ProcurarProdutoID(produtoId);
            
@@ -305,7 +386,16 @@ public class ProdutoDAO {
            
            
        }
-       public boolean RegistrarSaidaProduto(int produtoId, int quantidadeSaida,String observacao){
+    /**
+     * Registra uma saída de produto do estoque, decrementando a quantidade.
+     * Verifica se há quantidade suficiente antes de realizar a saída.
+     * 
+     * @param produtoId ID do produto
+     * @param quantidadeSaida Quantidade a ser removida do estoque
+     * @param observacao Observação sobre a saída
+     * @return true se a saída foi registrada com sucesso, false caso contrário
+     */
+    public boolean RegistrarSaidaProduto(int produtoId, int quantidadeSaida,String observacao){
            Conexao conexao = new Conexao();
            Produto produto = ProcurarProdutoID(produtoId);
            
@@ -341,7 +431,14 @@ public class ProdutoDAO {
            
        }
        
-     public void atualizarPreco(int idProduto, double novoPreco) throws SQLException {
+    /**
+     * Atualiza o preço de um produto específico.
+     * 
+     * @param idProduto ID do produto
+     * @param novoPreco Novo preço a ser definido
+     * @throws SQLException Se ocorrer erro na operação de banco de dados
+     */
+    public void atualizarPreco(int idProduto, double novoPreco) throws SQLException {
         String sql = "UPDATE produto SET preco = ? WHERE id = ?";
         try (
                 Connection conn = new Conexao().conectar(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -350,7 +447,12 @@ public class ProdutoDAO {
             stmt.executeUpdate();
         }
     }
-     public List<Produto> listarProdutoOrdenadoPorNome(){
+    /**
+     * Lista todos os produtos ordenados alfabeticamente por nome.
+     * 
+     * @return Lista de produtos ordenados por nome
+     */
+    public List<Produto> listarProdutoOrdenadoPorNome(){
          
          String sql = "SELECT * FROM produto ORDER BY nome ASC";
          
@@ -381,7 +483,12 @@ public class ProdutoDAO {
          return listaDeProdutos;
      }
      
-         public List<Produto> listarProdutosAbaixoMinMax() {
+    /**
+     * Lista produtos que estão abaixo da quantidade mínima ou acima da quantidade máxima.
+     * 
+     * @return Lista de produtos fora dos limites permitidos
+     */
+    public List<Produto> listarProdutosAbaixoMinMax() {
         List<Produto> lista = new ArrayList<>();
         String sql = "SELECT * FROM produto WHERE quantidade < min OR quantidade > max";
 
@@ -407,6 +514,11 @@ public class ProdutoDAO {
 
         return lista;
     }
+    /**
+     * Lista a quantidade de produtos agrupados por categoria.
+     * 
+     * @return Lista de arrays contendo [categoria, quantidade] para cada categoria
+     */
     public List<String[]> listarQuantidadePorCategoria() {
         List<String[]> lista = new ArrayList<>();
         String sql = "SELECT categoria, COUNT(*) AS total FROM produto GROUP BY categoria ORDER BY categoria";
@@ -426,7 +538,13 @@ public class ProdutoDAO {
         return lista;
     }
     
-    // Reajustar preços de todos os produtos em um percentual
+    /**
+     * Reajusta os preços de todos os produtos aplicando um percentual de aumento.
+     * 
+     * @param percentual Percentual de reajuste (ex: 10.0 para 10% de aumento)
+     * @return true se o reajuste foi aplicado com sucesso, false caso contrário
+     * @throws SQLException Se ocorrer erro na operação de banco de dados
+     */
     public boolean reajustarPrecosPercentual(double percentual) throws SQLException {
         String sql = "UPDATE produto SET preco = preco * (1 + ? / 100)";
         try (Connection conn = new Conexao().conectar(); 
@@ -438,7 +556,11 @@ public class ProdutoDAO {
         }
     }
     
-    // Listar produtos abaixo da quantidade mínima (apenas abaixo, não acima do max)
+    /**
+     * Lista produtos que estão abaixo da quantidade mínima permitida.
+     * 
+     * @return Lista de produtos abaixo do mínimo, ordenados por nome
+     */
     public List<Produto> listarProdutosAbaixoMinimo() {
         List<Produto> lista = new ArrayList<>();
         String sql = "SELECT * FROM produto WHERE quantidade < min ORDER BY nome ASC";
@@ -468,7 +590,12 @@ public class ProdutoDAO {
         return lista;
     }
     
-    // Balanço Físico/Financeiro: produtos com valor total de cada um e valor total do estoque
+    /**
+     * Lista o balanço físico e financeiro de todos os produtos.
+     * Retorna informações sobre quantidade e valor total de cada produto.
+     * 
+     * @return Lista de arrays contendo [id, nome, unidade, categoria, preco, quantidade, valor_total]
+     */
     public List<Object[]> listarBalancoFisicoFinanceiro() {
         List<Object[]> lista = new ArrayList<>();
         String sql = "SELECT id, nome, unidade, categoria, preco, quantidade, (preco * quantidade) as valor_total FROM produto ORDER BY nome ASC";
@@ -496,7 +623,11 @@ public class ProdutoDAO {
         return lista;
     }
     
-    // Calcular valor total do estoque
+    /**
+     * Calcula o valor total do estoque (soma de preço * quantidade de todos os produtos).
+     * 
+     * @return Valor total do estoque
+     */
     public double calcularValorTotalEstoque() {
         double valorTotal = 0.0;
         String sql = "SELECT SUM(preco * quantidade) as total FROM produto";
