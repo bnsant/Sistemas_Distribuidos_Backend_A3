@@ -15,7 +15,7 @@ import java.util.List;
  * Classe de acesso a dados (DAO) para operações relacionadas a registros de movimentação.
  * Fornece métodos para registrar, listar e consultar movimentações de estoque.
  * 
- * @author Sistema de Controle de Estoque
+ * @author bnsant
  * @version 1.0
  */
 public class RegistroMovimentacaoDAO {

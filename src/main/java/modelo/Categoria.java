@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Uma categoria agrupa produtos com características similares e possui
  * informações sobre tamanho e embalagem.
  * 
- * @author Sistema de Controle de Estoque
+ * @author bnsant
  * @version 1.0
  */
 public class Categoria implements Serializable {

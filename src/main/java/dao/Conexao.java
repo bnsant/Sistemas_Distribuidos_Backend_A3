@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * Classe responsável por gerenciar a conexão com o banco de dados MySQL.
  * Fornece métodos para estabelecer conexão com o banco de dados do sistema de estoque.
  * 
- * @author Sistema de Controle de Estoque
+ * @author bnsant
  * @version 1.0
  */
 public class Conexao {

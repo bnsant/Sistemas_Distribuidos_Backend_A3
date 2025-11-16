@@ -8,7 +8,7 @@ import service.EstoqueServiceImpl;
  * Classe principal do servidor RMI.
  * Responsável por iniciar o registro RMI e disponibilizar o serviço de estoque.
  * 
- * @author Sistema de Controle de Estoque
+ * @author bnsant
  * @version 1.0
  */
 public class ServidorRMI {

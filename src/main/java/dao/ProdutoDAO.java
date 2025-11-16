@@ -13,7 +13,7 @@ import java.util.List;
  * Classe de acesso a dados (DAO) para operações relacionadas a produtos.
  * Fornece métodos para criar, buscar, atualizar, excluir e listar produtos no banco de dados.
  * 
- * @author Sistema de Controle de Estoque
+ * @author bnsant
  * @version 1.0
  */
 public class ProdutoDAO {

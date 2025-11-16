@@ -16,7 +16,7 @@ import java.sql.SQLException;
  * Fornece a implementação concreta de todos os métodos definidos na interface EstoqueService.
  * Utiliza os DAOs para realizar operações no banco de dados.
  * 
- * @author Sistema de Controle de Estoque
+ * @author bnsant
  * @version 1.0
  */
 public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueService {

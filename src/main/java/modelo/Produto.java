@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Contém informações sobre identificação, nome, preço, quantidade em estoque,
  * limites mínimo e máximo, unidade de medida e categoria.
  * 
- * @author Sistema de Controle de Estoque
+ * @author bnsant
  * @version 1.0
  */
 public class Produto implements Serializable {

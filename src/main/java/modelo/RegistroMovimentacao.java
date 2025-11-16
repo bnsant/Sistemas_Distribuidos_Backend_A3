@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Armazena informações sobre entradas e saídas de produtos do estoque,
  * incluindo tipo de movimentação, quantidade, observações e data.
  * 
- * @author Sistema de Controle de Estoque
+ * @author bnsant
  * @version 1.0
  */
 public class RegistroMovimentacao implements Serializable {
